@@ -1,0 +1,141 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mobile App Specification",
+  "version": "0.1.0",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "vertical": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["schema_version", "vertical"]
+    },
+    "app": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nom de l'application"
+        },
+        "bundle_id_android": {
+          "type": "string",
+          "description": "Bundle ID Android"
+        },
+        "platforms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "theme": {
+          "type": "object"
+        }
+      },
+      "required": ["name", "bundle_id_android"]
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            },
+            "required": ["name", "fields"]
+          }
+        }
+      },
+      "required": ["entities"]
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "navigation": {
+          "type": "string"
+        },
+        "screens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "initial": {
+                "type": "boolean"
+              },
+              "requires_auth": {
+                "type": "boolean"
+              },
+              "widgets": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            },
+            "required": ["name", "widgets"]
+          }
+        }
+      },
+      "required": ["screens"]
+    },
+    "ci": {
+      "type": "object",
+      "properties": {
+        "android": {
+          "type": "object"
+        }
+      },
+      "required": ["android"]
+    },
+    "integrations": {
+      "type": "object",
+      "properties": {
+        "push_notifications": {
+          "type": "boolean"
+        },
+        "payments": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": ["meta", "app", "data", "ui", "ci"]
+}

@@ -1,0 +1,12 @@
+name: mobile_app_base
+description: "Forge AGI - Brick Flutter de base (génération déterministe depuis Spec)"
+version: 0.1.0
+vars:
+  app_name:
+    type: string
+  primary_color:
+    type: string
+  entities:
+    type: array
+  navigation:
+    type: string

@@ -1,0 +1,715 @@
+openapi: 3.1.0
+info:
+  title: Forge AGI API
+  description: API générée automatiquement par Forge AGI
+  version: 1.0.0
+  contact:
+    name: Forge AGI
+    url: https://github.com/forge-agi
+servers:
+- url: http://localhost:8000
+  description: Serveur de développement
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Vérifie que l'API est opérationnelle
+      tags:
+      - system
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users:
+    get:
+      summary: Liste tous les users
+      description: Récupère la liste de tous les users
+      tags:
+      - user
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Crée un nouveau user
+      description: Crée un nouveau user
+      tags:
+      - user
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Récupère un user par ID
+      description: Récupère les détails d'un user spécifique
+      tags:
+      - user
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Met à jour un user
+      description: Met à jour un user existant
+      tags:
+      - user
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Supprime un user
+      description: Supprime un user existant
+      tags:
+      - user
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /restaurants:
+    get:
+      summary: Liste tous les restaurants
+      description: Récupère la liste de tous les restaurants
+      tags:
+      - restaurant
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestaurantList'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Crée un nouveau restaurant
+      description: Crée un nouveau restaurant
+      tags:
+      - restaurant
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+  /restaurants/{id}:
+    get:
+      summary: Récupère un restaurant par ID
+      description: Récupère les détails d'un restaurant spécifique
+      tags:
+      - restaurant
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Met à jour un restaurant
+      description: Met à jour un restaurant existant
+      tags:
+      - restaurant
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Supprime un restaurant
+      description: Supprime un restaurant existant
+      tags:
+      - restaurant
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /bookings:
+    get:
+      summary: Liste tous les bookings
+      description: Récupère la liste de tous les bookings
+      tags:
+      - booking
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingList'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Crée un nouveau booking
+      description: Crée un nouveau booking
+      tags:
+      - booking
+      parameters: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+  /bookings/{id}:
+    get:
+      summary: Récupère un booking par ID
+      description: Récupère les détails d'un booking spécifique
+      tags:
+      - booking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Met à jour un booking
+      description: Met à jour un booking existant
+      tags:
+      - booking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Supprime un booking
+      description: Supprime un booking existant
+      tags:
+      - booking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Identifiant unique
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Ressource non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+      - error
+      - message
+      - status
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        timestamp:
+          type: string
+          format: date-time
+      required:
+      - status
+      - timestamp
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        displayName:
+          type: string
+      required:
+      - email
+      - displayName
+    UserList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+      required:
+      - data
+      - total
+    Restaurant:
+      type: object
+      properties:
+        title:
+          type: string
+        address:
+          type: string
+        seats:
+          type: integer
+        phone:
+          type: string
+      required:
+      - title
+      - address
+      - seats
+      - phone
+    RestaurantList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Restaurant'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+      required:
+      - data
+      - total
+    Booking:
+      type: object
+      properties:
+        userId:
+          type: string
+        restaurantId:
+          type: string
+        date:
+          type: string
+          format: date-time
+        partySize:
+          type: integer
+          format: date-time
+      required:
+      - userId
+      - restaurantId
+      - date
+      - partySize
+    BookingList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Booking'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+      required:
+      - data
+      - total
+tags:
+- name: system
+  description: Endpoints système
+- name: user
+  description: Opérations sur les users
+- name: restaurant
+  description: Opérations sur les restaurants
+- name: booking
+  description: Opérations sur les bookings

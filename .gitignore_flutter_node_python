@@ -1,0 +1,46 @@
+
+# General
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+.ios/
+.android/
+.melos_tool/
+*.keystore
+*.jks
+
+# Android
+**/gradle/
+**/.gradle/
+**/local.properties
+
+# Node
+node_modules/
+dist/
+coverage/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+# Artifacts
+*.apk
+*.aab
+*.ipa
+*.xcarchive

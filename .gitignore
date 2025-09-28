@@ -1,0 +1,45 @@
+@"
+# General
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+
+# Flutter/Dart/Android
+work/
+build/
+.dart_tool/
+.melos_tool/
+.android/
+.ios/
+**/.gradle/
+android/.gradle/
+android/gradle/
+*.keystore
+*.jks
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+
+# Node/JS
+node_modules/
+dist/
+coverage/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+# Binaries / Artifacts
+*.apk
+*.aab
+*.ipa
+*.xcarchive
+"@ | Set-Content -Encoding UTF8 .gitignore

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mobile_app v0.2.0",
+  "type": "object",
+  "required": [
+    "meta",
+    "app",
+    "data",
+    "ui",
+    "workflows",
+    "ci",
+    "telemetry"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "vertical"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "0.2.0"
+        },
+        "vertical": {
+          "const": "mobile_app"
+        }
+      }
+    },
+    "app": {
+      "type": "object"
+    },
+    "data": {
+      "type": "object"
+    },
+    "security": {
+      "type": "object"
+    },
+    "ui": {
+      "type": "object"
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "assets": {
+      "type": "object"
+    },
+    "i18n": {
+      "type": "object"
+    },
+    "seed": {
+      "type": "object"
+    },
+    "feature_flags": {
+      "type": "object"
+    },
+    "ci": {
+      "type": "object"
+    },
+    "integrations": {
+      "type": "object"
+    },
+    "telemetry": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,27 @@
+﻿# Dockerfile pour Celery Worker
+FROM python:3.11-slim
+
+# Installation des dépendances système minimales
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    ca-certificates \
+    zip \
+    unzip \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Définition du répertoire de travail
+WORKDIR /worker
+
+# Copie des fichiers de dépendances
+COPY services/worker/requirements.txt .
+
+# Installation des dépendances Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copie du code source du worker
+COPY services/worker/ .
+
+# ENTRYPOINT temporaire (on branchera Celery plus tard)
+ENTRYPOINT ["sleep", "infinity"]

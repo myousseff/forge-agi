@@ -1,0 +1,63 @@
+﻿services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=forge
+      - POSTGRES_PASSWORD=forge
+      - POSTGRES_DB=forge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.api
+    environment:
+      - DATABASE_URL=postgresql+psycopg://forge:forge@db:5432/forge
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    working_dir: /app
+
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.worker
+    environment:
+      - DATABASE_URL=postgresql+psycopg://forge:forge@db:5432/forge
+      - REDIS_URL=redis://redis:6379/0
+      - WORK_DIR=/work
+      - SCHEMA_PATH=/workspace/specs/schema/mobile-app-0.1.0.json
+      - WORKSPACE_PATH=/workspace
+      - REPO_ROOT=/workspace
+    volumes:
+      - ../work:/work
+      - ..:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - db
+      - redis
+    working_dir: /worker
+    command: ["sleep", "infinity"]
+
+  runner_flutter:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.flutter
+    working_dir: /work
+    volumes:
+      - ../work:/work
+      - ..:/workspace
+
+volumes:
+  pgdata:

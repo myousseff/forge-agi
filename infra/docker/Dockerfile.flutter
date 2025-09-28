@@ -1,0 +1,69 @@
+﻿# Dockerfile pour Flutter Runner
+FROM ubuntu:22.04
+
+# Installation des dépendances système
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    unzip \
+    zip \
+    xz-utils \
+    libglu1-mesa \
+    ca-certificates \
+    openjdk-17-jdk \
+    && rm -rf /var/lib/apt/lists/*
+
+# Installation de Flutter SDK (version épinglée 3.22.2)
+ENV FLUTTER_HOME=/opt/flutter
+ENV PATH=$PATH:$FLUTTER_HOME/bin
+
+# Clone Flutter avec une profondeur limitée pour accélérer
+RUN git clone --depth 1 --branch 3.22.2 https://github.com/flutter/flutter.git $FLUTTER_HOME
+
+# Configuration de Flutter
+RUN flutter config --no-analytics
+RUN flutter doctor
+
+# --- ANDROID SDK (cmdline-tools) ---
+ENV ANDROID_HOME=/opt/android \
+    ANDROID_SDK_ROOT=/opt/android \
+    PATH=$PATH:/opt/android/cmdline-tools/latest/bin:/opt/android/platform-tools:/opt/android/build-tools/34.0.0
+
+RUN mkdir -p /opt/android/cmdline-tools \
+ && curl -sSL https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -o /tmp/cmdtools.zip \
+ && unzip -q /tmp/cmdtools.zip -d /opt/android/cmdline-tools/ \
+ && mv /opt/android/cmdline-tools/cmdline-tools /opt/android/cmdline-tools/latest \
+ && yes | /opt/android/cmdline-tools/latest/bin/sdkmanager --licenses \
+ && /opt/android/cmdline-tools/latest/bin/sdkmanager \
+      "platform-tools" \
+      "platforms;android-34" \
+      "build-tools;34.0.0"
+
+# --- ANDROID SDK extra (speed) ---
+ENV ANDROID_HOME=/opt/android \
+    ANDROID_SDK_ROOT=/opt/android \
+    GRADLE_USER_HOME=/root/.gradle \
+    PUB_CACHE=/root/.pub-cache
+
+RUN yes | sdkmanager --licenses && \
+    sdkmanager --install \
+      "platform-tools" \
+      "platforms;android-34" \
+      "build-tools;34.0.0" \
+      "build-tools;30.0.3"
+
+# Gradle perf defaults
+RUN mkdir -p /root/.gradle && \
+    printf "org.gradle.caching=true\norg.gradle.parallel=true\norg.gradle.configureondemand=true\norg.gradle.jvmargs=-Xmx3g -Dfile.encoding=UTF-8\n" > /root/.gradle/gradle.properties
+
+# Installation de mason_cli (version compatible)
+RUN dart pub global activate mason_cli
+
+# Export PATH du cache dart pub global
+ENV PATH="/root/.pub-cache/bin:${PATH}"
+
+# Définition du répertoire de travail
+WORKDIR /work
+
+# Commande par défaut
+CMD ["bash"]

@@ -1,0 +1,80 @@
+﻿meta:
+  schema_version: "0.1.0"
+  vertical: "mobile_app"
+  created_at: "2025-08-29T20:00:00Z"
+  description: "Application de réservation simple pour restaurants"
+
+app:
+  name: "Resa Cafe Atlas"
+  bundle_id_android: "com.promex.resa.cafeatlas"
+  platforms: [android]
+  theme:
+    primary_color: "#3B82F6"
+    typography: "system"
+    dark_mode: true
+
+data:
+  entities:
+    - name: User
+      fields:
+        - { name: email, type: string, required: true }
+        - { name: displayName, type: string }
+    - name: Restaurant
+      fields:
+        - { name: title, type: string, required: true, max: 120 }
+        - { name: address, type: string }
+        - { name: seats, type: int, min: 0 }
+        - { name: phone, type: string }
+      indexes:
+        - { fields: [title], unique: false }
+    - name: Booking
+      fields:
+        - { name: userId, type: ref, ref: User, required: true }
+        - { name: restaurantId, type: ref, ref: Restaurant, required: true }
+        - { name: date, type: datetime, required: true }
+        - { name: partySize, type: int, min: 1, max: 12, required: true }
+
+security:
+  auth: email_password
+  rules:
+    - "Users can read/write only their own bookings"
+    - "Restaurants readable by all authenticated users"
+
+ui:
+  navigation: tabs
+  screens:
+    - name: SignIn
+      initial: true
+      widgets:
+        - { type: SignIn }
+        - { type: Button, action: navigate, navigate_to: "SignUp" }
+    - name: SignUp
+      widgets:
+        - { type: SignUp }
+    - name: Home
+      requires_auth: true
+      widgets:
+        - type: List
+          source: Restaurant
+          search: true
+    - name: BookingForm
+      requires_auth: true
+      widgets:
+        - type: Form
+          entity: Booking
+          fields: [restaurantId, date, partySize]
+    - name: MyBookings
+      requires_auth: true
+      widgets:
+        - type: List
+          source: Booking
+          filters: ["userId == currentUser"]
+
+ci:
+  android:
+    build_variant: release
+    keystore_mode: unsigned
+
+integrations:
+  push_notifications: false
+  payments: none

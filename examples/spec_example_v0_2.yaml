@@ -1,0 +1,118 @@
+meta:
+  schema_version: "0.2.0"
+  vertical: "mobile_app"
+  created_at: "2025-09-28T15:00:00Z"
+  description: "App de réservation simple, reproductible et testée"
+
+app:
+  name: "Resa Cafe Atlas"
+  bundle_id_android: "com.promex.resa.cafeatlas"
+  platforms: [android]
+  theme:
+    primary_color: "#3B82F6"
+    typography: "system"
+    dark_mode: true
+
+data:
+  entities:
+    - name: User
+      fields:
+        - { name: email, type: string, required: true, validation: { format: email } }
+        - { name: displayName, type: string, validation: { maxLength: 80 } }
+      indexes:
+        - { fields: [email], unique: true }
+    - name: Restaurant
+      fields:
+        - { name: title, type: string, required: true, validation: { maxLength: 120 } }
+        - { name: address, type: string }
+        - { name: seats, type: int, validation: { min: 0 } }
+        - { name: phone, type: string, validation: { regex: "^[0-9+ -]{8,}$" } }
+      indexes:
+        - { fields: [title], unique: false }
+    - name: Booking
+      fields:
+        - { name: userId, type: ref, ref: User, required: true }
+        - { name: restaurantId, type: ref, ref: Restaurant, required: true }
+        - { name: date, type: datetime, required: true }
+        - { name: partySize, type: int, required: true, validation: { min: 1, max: 12 } }
+  indexes:
+    composite:
+      - { fields: [restaurantId, date], unique: false }
+
+security:
+  auth: email_password
+  rules:
+    - { effect: "allow", target: "Booking", condition: "owner == currentUser" }
+    - { effect: "allow", target: "Restaurant", condition: "authenticated" }
+
+ui:
+  navigation: tabs
+  screens:
+    - name: SignIn
+      initial: true
+      widgets:
+        - { type: SignIn }
+        - { type: Button, action: navigate, route: "SignUp" }
+    - name: SignUp
+      widgets: [ { type: SignUp } ]
+    - name: Home
+      requires_auth: true
+      widgets:
+        - type: List
+          source: Restaurant
+          search: true
+    - name: BookingForm
+      requires_auth: true
+      widgets:
+        - type: Form
+          entity: Booking
+          fields: [restaurantId, date, partySize]
+    - name: MyBookings
+      requires_auth: true
+      widgets:
+        - type: List
+          source: Booking
+          filters: ["userId == currentUser"]
+
+workflows:
+  - name: "smoke_booking"
+    steps:
+      - { action: "navigate", route: "SignIn" }
+      - { action: "sign_in", provider: "email_password" }
+      - { action: "navigate", route: "Home" }
+      - { action: "create", entity: "Booking" }
+      - { action: "navigate", route: "MyBookings" }
+      - { assert: "list_contains", source: "Booking" }
+
+assets:
+  images:
+    - { id: "logo", path: "assets/logo.png" }
+
+i18n:
+  default_locale: "fr"
+  locales: ["fr"]
+  keys:
+    app.title: "Resa Cafe Atlas"
+
+seed:
+  User:
+    - { email: "test@example.com", displayName: "Test" }
+  Restaurant:
+    - { title: "Cafe Atlas", address: "Rue Meknes", seats: 30, phone: "+212 600 000 000" }
+
+feature_flags:
+  payments: false
+
+ci:
+  android:
+    build_variant: release
+    keystore_mode: unsigned
+  signing: unsigned
+
+integrations:
+  auth_providers: ["email_password"]
+  payments: none
+
+telemetry:
+  enabled: true
+  mode: "local"

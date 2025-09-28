@@ -1,0 +1,68 @@
+﻿services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=forge
+      - POSTGRES_PASSWORD=forge
+      - POSTGRES_DB=forge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.api
+    environment:
+      - DATABASE_URL=postgresql+psycopg://forge:forge@db:5432/forge
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    working_dir: /app
+    volumes:
+      - ../work/uploads:/uploads
+
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.worker
+    command: uvicorn worker.app:app --host 0.0.0.0 --port 9000 --log-level info
+    ports:
+      - "9000:9000"
+    environment:
+      - API_BASE_URL=http://api:8080
+      - REDIS_URL=redis://redis:6379/0
+      - PYTHONPATH=/worker
+    depends_on:
+      - api
+      - redis
+    volumes:
+      - ../services/worker:/worker
+
+  runner_flutter:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.flutter
+    working_dir: /work
+    volumes:
+      - ..:/workspace
+      - ../work:/work
+      - gradle-cache:/root/.gradle
+      - pub-cache:/root/.pub-cache
+      - android-sdk:/opt/android
+
+volumes:
+  pgdata:
+  gradle-cache:
+  pub-cache:
+  android-sdk:
+
